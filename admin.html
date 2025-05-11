@@ -158,7 +158,7 @@
       });
     }
 
-    window.deleteItem = async function(id, collectionName) {
+    globalThis.deleteItem = async function(id, collectionName) {
       await deleteDoc(doc(db, collectionName, id));
       if (collectionName === 'menuItems') loadMenuItems();
     }
