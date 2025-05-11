@@ -2,159 +2,58 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Haroon Restaurant</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f8f8; color: #333; }
-
-    header {
-      background: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092') center/cover no-repeat;
-      height: 100vh;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      color: white;
-      text-align: center;
-      position: relative;
-    }
-
-    header::after {
-      content: "";
-      position: absolute;
-      top: 0; left: 0; width: 100%; height: 100%;
-      background-color: rgba(0, 0, 0, 0.5);
-    }
-
-    header .content {
-      position: relative;
-      z-index: 2;
-    }
-
-    header h1 {
-      font-size: 4rem;
-      margin-bottom: 20px;
-    }
-
-    header p {
-      font-size: 1.2rem;
-    }
-
-    nav {
-      background: #333;
-      padding: 10px 20px;
-      position: fixed;
-      top: 0;
-      width: 100%;
-      z-index: 999;
-    }
-
-    nav ul {
-      list-style: none;
-      display: flex;
-      justify-content: center;
-      gap: 30px;
-    }
-
-    nav ul li a {
-      color: white;
-      text-decoration: none;
-      font-weight: bold;
-    }
-
-    section {
-      padding: 60px 20px;
-      max-width: 1100px;
-      margin: auto;
-    }
-
-    .about, .contact {
-      text-align: center;
-    }
-
-    .btn {
-      background: #ff8000;
-      padding: 10px 25px;
-      border: none;
-      border-radius: 25px;
-      color: white;
-      font-size: 1rem;
-      cursor: pointer;
-      margin-top: 20px;
-    }
-
-    .gallery {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 20px;
-    }
-
-    .gallery img {
-      width: 100%;
-      border-radius: 10px;
-      object-fit: cover;
-    }
-
-    footer {
-      background: #222;
-      color: white;
-      text-align: center;
-      padding: 20px;
+    body { font-family: Arial, sans-serif; margin: 0; padding: 0; }
+    header, section { padding: 20px; text-align: center; }
+    img.full-width { width: 100%; height: auto; max-height: 400px; object-fit: cover; }
+    .gallery { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; }
+    .gallery img { width: 45%; max-width: 300px; height: auto; border-radius: 8px; }
+    footer { background: #333; color: white; padding: 20px; text-align: center; margin-top: 40px; }
+    @media (max-width: 600px) {
+      .gallery img { width: 90%; }
     }
   </style>
 </head>
 <body>
-  <nav>
-    <ul>
-      <li><a href="#about">About</a></li>
-      <li><a href="#menu">Menu</a></li>
-      <li><a href="#gallery">Gallery</a></li>
-      <li><a href="#contact">Contact</a></li>
-    </ul>
-  </nav>
 
+  <!-- HERO SECTION -->
   <header>
-    <div class="content">
-      <h1>Welcome to Haroon Restaurant</h1>
-      <p>Serving fresh & delicious food daily</p>
-      <a href="#menu" class="btn">Explore Menu</a>
-    </div>
+    <h1>Welcome to Haroon Restaurant</h1>
+    <img id="heroImage" class="full-width" src="" alt="Hero Image" />
   </header>
 
-  <section id="about" class="about">
+  <!-- ABOUT SECTION -->
+  <section>
     <h2>About Us</h2>
-    <p>Haroon Restaurant brings you authentic taste, friendly service, and a warm atmosphere. Whether you're dining in or taking out, we make every meal memorable.</p>
+    <p>We serve fresh, delicious food every day with love and tradition.</p>
+    <img id="aboutImage" class="full-width" src="" alt="About Image" />
   </section>
 
-  <section id="menu" class="about">
-    <h2>Our Menu</h2>
-    <p>Check out our full menu with photos and prices.</p>
-    <a href="menu.html" class="btn">View Menu</a>
-  </section>
-
-  <section id="gallery">
-    <h2 style="text-align:center; margin-bottom:30px;">Gallery</h2>
+  <!-- GALLERY SECTION -->
+  <section>
+    <h2>Our Food Gallery</h2>
     <div class="gallery">
-      <img src="https://source.unsplash.com/400x300/?restaurant,food" alt="Food 1">
-      <img src="https://source.unsplash.com/400x300/?dining,meal" alt="Food 2">
-      <img src="https://source.unsplash.com/400x300/?grilled,fish" alt="Food 3">
-      <img src="https://source.unsplash.com/400x300/?fastfood,plate" alt="Food 4">
+      <img id="gallery1" src="" alt="Gallery 1" />
+      <img id="gallery2" src="" alt="Gallery 2" />
     </div>
   </section>
 
-  <section id="contact" class="contact">
-    <h2>Contact Us</h2>
-    <p>Call us at: <strong>(123) 456-7890</strong> or email: <strong>haroon@example.com</strong></p>
+  <!-- FLYER SECTION -->
+  <section>
+    <h2>Current Deals & Flyers</h2>
+    <img id="flyer" class="full-width" src="" alt="Flyer Image" />
   </section>
 
   <footer>
-    &copy; 2025 Haroon Restaurant. All rights reserved.
+    <p>© 2025 Haroon Restaurant. All rights reserved.</p>
   </footer>
 
-  <!-- Firebase -->
+  <!-- Firebase + Script -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+    import { getFirestore, doc, getDoc } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyBdHvx7f6gO_WVH3Y0GMPSIWSO50LBTD8E",
@@ -166,6 +65,25 @@
     };
 
     const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function loadHomepageContent() {
+      const ref = doc(db, "homepageContent", "images");
+      const docSnap = await getDoc(ref);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        document.getElementById("heroImage").src = data.heroImage || "";
+        document.getElementById("aboutImage").src = data.aboutImage || "";
+        document.getElementById("gallery1").src = data.gallery1 || "";
+        document.getElementById("gallery2").src = data.gallery2 || "";
+        document.getElementById("flyer").src = data.flyer || "";
+      } else {
+        console.log("No homepageContent found.");
+      }
+    }
+
+    loadHomepageContent();
   </script>
+
 </body>
 </html>
