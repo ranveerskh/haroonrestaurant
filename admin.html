@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Panel - Haroon Restaurant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      padding: 20px;
+      margin: 0;
+    }
+    .container {
+      max-width: 900px;
+      margin: auto;
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+    label {
+      display: block;
+      margin-top: 15px;
+      font-weight: bold;
+    }
+    input, textarea, select {
+      width: 100%;
+      padding: 10px;
+      margin-top: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+    button {
+      background: #ff8000;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      margin-top: 15px;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+    hr {
+      margin: 40px 0;
+    }
+    .menu-list, .flyer-list {
+      margin-top: 20px;
+    }
+    .menu-item, .flyer-item {
+      display: flex;
+      justify-content: space-between;
+      padding: 10px;
+      border-bottom: 1px solid #ddd;
+    }
+    .menu-item span, .flyer-item span {
+      flex: 1;
+    }
+    .menu-item button, .flyer-item button {
+      background: #e74c3c;
+      border: none;
+      color: white;
+      padding: 5px 10px;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Admin Panel - Haroon Restaurant</h2>
+
+    <h3>Add Menu Item</h3>
+    <label>Category</label>
+    <select id="category">
+      <option>Fish Combos</option>
+      <option>Family Meals</option>
+      <option>Sides & Extras</option>
+      <option>Drinks</option>
+    </select>
+
+    <label>Item Name</label>
+    <input type="text" id="itemName" placeholder="e.g. 2 Piece Haddock Combo" />
+
+    <label>Description</label>
+    <textarea id="itemDesc" placeholder="e.g. Includes fries and coleslaw"></textarea>
+
+    <label>Price ($)</label>
+    <input type="number" id="itemPrice" placeholder="e.g. 12.99" />
+
+    <button onclick="addMenuItem()">Add Menu Item</button>
+
+    <div class="menu-list" id="menuList"></div>
+
+    <hr>
+
+    <h3>Update Flyers / Landing Photos</h3>
+    <label>Flyer Image URL</label>
+    <input type="url" id="flyerUrl" placeholder="Paste flyer image URL here" />
+    <button onclick="addFlyer()">Add Flyer</button>
+
+    <div class="flyer-list" id="flyerList"></div>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBdHvx7f6gO_WVH3Y0GMPSIWSO50LBTD8E",
+      authDomain: "haroon-restaurant.firebaseapp.com",
+      projectId: "haroon-restaurant",
+      storageBucket: "haroon-restaurant.firebasestorage.app",
+      messagingSenderId: "154794427574",
+      appId: "1:154794427574:web:88cba2b1ccd25504391217"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+
+    async function addMenuItem() {
+      const category = document.getElementById('category').value;
+      const name = document.getElementById('itemName').value;
+      const description = document.getElementById('itemDesc').value;
+      const price = document.getElementById('itemPrice').value;
+
+      if (!name || !price) return alert("Item name and price are required");
+
+      await addDoc(collection(db, "menuItems"), { category, name, description, price });
+      loadMenuItems();
+    }
+
+    async function loadMenuItems() {
+      const list = document.getElementById("menuList");
+      list.innerHTML = "<h4>Menu Items</h4>";
+      const querySnapshot = await getDocs(collection(db, "menuItems"));
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        list.innerHTML += `
+          <div class='menu-item'>
+            <span>${data.category}</span>
+            <span>${data.name}</span>
+            <span>$${data.price}</span>
+            <button onclick="deleteItem('${docSnap.id}', 'menuItems')">Delete</button>
+          </div>`;
+      });
+    }
+
+    async function addFlyer() {
+      const url = document.getElementById("flyerUrl").value;
+      if (!url) return alert("Enter a flyer image URL");
+      await addDoc(collection(db, "flyers"), { url });
+      loadFlyers();
+    }
+
+    async function loadFlyers() {
+      const list = document.getElementById("flyerList");
+      list.innerHTML = "<h4>Flyers</h4>";
+      const querySnapshot = await getDocs(collection(db, "flyers"));
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        list.innerHTML += `
+          <div class='flyer-item'>
+            <span><img src="${data.url}" width="100"/></span>
+            <span>${data.url}</span>
+            <button onclick="deleteItem('${docSnap.id}', 'flyers')">Delete</button>
+          </div>`;
+      });
+    }
+
+    window.deleteItem = async function(id, collectionName) {
+      await deleteDoc(doc(db, collectionName, id));
+      if (collectionName === 'menuItems') loadMenuItems();
+      if (collectionName === 'flyers') loadFlyers();
+    }
+
+    loadMenuItems();
+    loadFlyers();
+  </script>
+</body>
+</html>
