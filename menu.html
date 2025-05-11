@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Menu - Haroon Restaurant</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      background-color: #f8f8f8;
+    }
+    header {
+      background: #333;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+    h1 {
+      margin: 0;
+    }
+    .container {
+      max-width: 1000px;
+      margin: 40px auto;
+      padding: 0 20px;
+    }
+    .category {
+      margin-bottom: 40px;
+    }
+    .category h2 {
+      border-bottom: 2px solid #ff8000;
+      padding-bottom: 5px;
+      color: #333;
+    }
+    .item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #ddd;
+    }
+    .item-name {
+      font-weight: bold;
+      font-size: 1.1rem;
+    }
+    .item-desc {
+      font-size: 0.9rem;
+      color: #555;
+    }
+    .price {
+      color: #ff8000;
+      font-weight: bold;
+    }
+    @media screen and (max-width: 600px) {
+      .item {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+      .price {
+        margin-top: 5px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Our Menu</h1>
+    <p>Delicious meals made fresh daily</p>
+  </header>
+
+  <div class="container">
+    <div class="category">
+      <h2>Fish Combos</h2>
+      <div class="item">
+        <div>
+          <div class="item-name">2 Piece Haddock Combo</div>
+          <div class="item-desc">Includes fries and coleslaw</div>
+        </div>
+        <div class="price">$12.99</div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">3 Piece Cod Combo</div>
+          <div class="item-desc">Served with tartar sauce and lemon</div>
+        </div>
+        <div class="price">$15.99</div>
+      </div>
+    </div>
+
+    <div class="category">
+      <h2>Family Meals</h2>
+      <div class="item">
+        <div>
+          <div class="item-name">Family Pack (8 pcs)</div>
+          <div class="item-desc">Comes with 2 large fries and 4 coleslaws</div>
+        </div>
+        <div class="price">$39.99</div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">Value Family Deal</div>
+          <div class="item-desc">10 fish fingers, 2 sauces, and drinks</div>
+        </div>
+        <div class="price">$29.99</div>
+      </div>
+    </div>
+
+    <div class="category">
+      <h2>Sides & Extras</h2>
+      <div class="item">
+        <div>
+          <div class="item-name">Large Fries</div>
+        </div>
+        <div class="price">$3.99</div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">Gravy</div>
+        </div>
+        <div class="price">$1.49</div>
+      </div>
+    </div>
+
+    <div class="category">
+      <h2>Drinks</h2>
+      <div class="item">
+        <div>
+          <div class="item-name">Can of Pop</div>
+          <div class="item-desc">Coke, Pepsi, Sprite, Fanta</div>
+        </div>
+        <div class="price">$1.99</div>
+      </div>
+      <div class="item">
+        <div>
+          <div class="item-name">Bottled Water</div>
+        </div>
+        <div class="price">$1.49</div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>
