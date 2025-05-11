@@ -1,1 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Edit Homepage Images</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      margin: 0;
+      padding: 20px;
+    }
+    .container {
+      max-width: 800px;
+      background: #fff;
+      padding: 20px;
+      margin: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+    h2 {
+      margin-top: 0;
+    }
+    label {
+      font-weight: bold;
+      margin-top: 20px;
+      display: block;
+    }
+    input {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      margin-bottom: 15px;
+    }
+    img.preview {
+      max-width: 100%;
+      max-height: 150px;
+      display: block;
+      margin: 10px 0;
+      border: 1px solid #ccc;
+    }
+    button {
+      padding: 10px 20px;
+      background: #28a745;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #218838;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Edit Homepage Images</h2>
+
+    <label>Hero Image URL</label>
+    <input type="text" id="heroImage">
+    <img id="heroPreview" class="preview" src="">
+
+    <label>About Image URL</label>
+    <input type="text" id="aboutImage">
+    <img id="aboutPreview" class="preview" src="">
+
+    <label>Gallery Image 1 URL</label>
+    <input type="text" id="gallery1">
+    <img id="gallery1Preview" class="preview" src="">
+
+    <label>Gallery Image 2 URL</label>
+    <input type="text" id="gallery2">
+    <img id="gallery2Preview" class="preview" src="">
+
+    <label>Flyer Image URL</label>
+    <input type="text" id="flyer">
+    <img id="flyerPreview" class="preview" src="">
+
+    <button onclick="saveContent()">Save Changes</button>
+  </div>
+
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+    import {
+      getFirestore, doc, getDoc, setDoc
+    } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBdHvx7f6gO_WVH3Y0GMPSIWSO50LBTD8E",
+      authDomain: "haroon-restaurant.firebaseapp.com",
+      projectId: "haroon-restaurant",
+      storageBucket: "haroon-restaurant.firebasestorage.app",
+      messagingSenderId: "154794427574",
+      appId: "1:154794427574:web:88cba2b1ccd25504391217"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
+    const docRef = doc(db, "homepageContent", "images");
+
+    const fields = {
+      heroImage: "heroImage",
+      aboutImage: "aboutImage",
+      gallery1: "gallery1",
+      gallery2: "gallery2",
+      flyer: "flyer"
+    };
+
+    function updatePreview(id) {
+      document.getElementById(id + "Preview").src = document.getElementById(id).value;
+    }
+
+    for (let id in fields) {
+      document.getElementById(id).addEventListener("input", () => updatePreview(id));
+    }
+
+    async function loadContent() {
+      const docSnap = await getDoc(docRef);
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        for (let id in fields) {
+          document.getElementById(id).value = data[id] || "";
+          document.getElementById(id + "Preview").src = data[id] || "";
+        }
+      }
+    }
+
+    globalThis.saveContent = async function () {
+      const data = {};
+      for (let id in fields) {
+        data[id] = document.getElementById(id).value.trim();
+      }
+      await setDoc(docRef, data);
+      alert("Content saved successfully!");
+    }
+
+    loadContent();
+  </script>
+</body>
+</html>
 
