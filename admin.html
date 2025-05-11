@@ -77,12 +77,8 @@
 
     <h3>Add Menu Item</h3>
     <label>Category</label>
-    <select id="category">
-      <option>Fish Combos</option>
-      <option>Family Meals</option>
-      <option>Sides & Extras</option>
-      <option>Drinks</option>
-    </select>
+    <select id="category"></select>
+    <input type="text" id="newCategory" placeholder="Or enter a new category" />
 
     <label>Item Name</label>
     <input type="text" id="itemName" placeholder="e.g. 2 Piece Haddock Combo" />
@@ -124,7 +120,8 @@
     const db = getFirestore(app);
 
     async function addMenuItem() {
-      const category = document.getElementById('category').value;
+      const newCategoryInput = document.getElementById('newCategory').value.trim();
+      const category = newCategoryInput || document.getElementById('category').value;
       const name = document.getElementById('itemName').value;
       const description = document.getElementById('itemDesc').value;
       const price = document.getElementById('itemPrice').value;
@@ -133,6 +130,7 @@
 
       await addDoc(collection(db, "menuItems"), { category, name, description, price });
       loadMenuItems();
+      if (newCategoryInput) loadCategories();
     }
 
     async function loadMenuItems() {
@@ -148,6 +146,22 @@
             <span>$${data.price}</span>
             <button onclick="deleteItem('${docSnap.id}', 'menuItems')">Delete</button>
           </div>`;
+      });
+    }
+
+    async function loadCategories() {
+      const catDropdown = document.getElementById('category');
+      catDropdown.innerHTML = '';
+      const catSet = new Set();
+      const querySnapshot = await getDocs(collection(db, "menuItems"));
+      querySnapshot.forEach(docSnap => {
+        const data = docSnap.data();
+        if (data.category) catSet.add(data.category);
+      });
+      catSet.forEach(cat => {
+        const opt = document.createElement('option');
+        opt.value = opt.textContent = cat;
+        catDropdown.appendChild(opt);
       });
     }
 
@@ -181,6 +195,7 @@
 
     loadMenuItems();
     loadFlyers();
+    loadCategories();
   </script>
 </body>
 </html>
