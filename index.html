@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Haroon Restaurant</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: #f8f8f8; color: #333; }
+
+    header {
+      background: url('https://images.unsplash.com/photo-1600891964599-f61ba0e24092') center/cover no-repeat;
+      height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      text-align: center;
+      position: relative;
+    }
+
+    header::after {
+      content: "";
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background-color: rgba(0, 0, 0, 0.5);
+    }
+
+    header .content {
+      position: relative;
+      z-index: 2;
+    }
+
+    header h1 {
+      font-size: 4rem;
+      margin-bottom: 20px;
+    }
+
+    header p {
+      font-size: 1.2rem;
+    }
+
+    nav {
+      background: #333;
+      padding: 10px 20px;
+      position: fixed;
+      top: 0;
+      width: 100%;
+      z-index: 999;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    section {
+      padding: 60px 20px;
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .about, .contact {
+      text-align: center;
+    }
+
+    .btn {
+      background: #ff8000;
+      padding: 10px 25px;
+      border: none;
+      border-radius: 25px;
+      color: white;
+      font-size: 1rem;
+      cursor: pointer;
+      margin-top: 20px;
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 20px;
+    }
+
+    .gallery img {
+      width: 100%;
+      border-radius: 10px;
+      object-fit: cover;
+    }
+
+    footer {
+      background: #222;
+      color: white;
+      text-align: center;
+      padding: 20px;
+    }
+  </style>
+</head>
+<body>
+  <nav>
+    <ul>
+      <li><a href="#about">About</a></li>
+      <li><a href="#menu">Menu</a></li>
+      <li><a href="#gallery">Gallery</a></li>
+      <li><a href="#contact">Contact</a></li>
+    </ul>
+  </nav>
+
+  <header>
+    <div class="content">
+      <h1>Welcome to Haroon Restaurant</h1>
+      <p>Serving fresh & delicious food daily</p>
+      <a href="#menu" class="btn">Explore Menu</a>
+    </div>
+  </header>
+
+  <section id="about" class="about">
+    <h2>About Us</h2>
+    <p>Haroon Restaurant brings you authentic taste, friendly service, and a warm atmosphere. Whether you're dining in or taking out, we make every meal memorable.</p>
+  </section>
+
+  <section id="menu" class="about">
+    <h2>Our Menu</h2>
+    <p>Check out our full menu with photos and prices.</p>
+    <a href="menu.html" class="btn">View Menu</a>
+  </section>
+
+  <section id="gallery">
+    <h2 style="text-align:center; margin-bottom:30px;">Gallery</h2>
+    <div class="gallery">
+      <img src="https://source.unsplash.com/400x300/?restaurant,food" alt="Food 1">
+      <img src="https://source.unsplash.com/400x300/?dining,meal" alt="Food 2">
+      <img src="https://source.unsplash.com/400x300/?grilled,fish" alt="Food 3">
+      <img src="https://source.unsplash.com/400x300/?fastfood,plate" alt="Food 4">
+    </div>
+  </section>
+
+  <section id="contact" class="contact">
+    <h2>Contact Us</h2>
+    <p>Call us at: <strong>(123) 456-7890</strong> or email: <strong>haroon@example.com</strong></p>
+  </section>
+
+  <footer>
+    &copy; 2025 Haroon Restaurant. All rights reserved.
+  </footer>
+
+  <!-- Firebase -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBdHvx7f6gO_WVH3Y0GMPSIWSO50LBTD8E",
+      authDomain: "haroon-restaurant.firebaseapp.com",
+      projectId: "haroon-restaurant",
+      storageBucket: "haroon-restaurant.firebasestorage.app",
+      messagingSenderId: "154794427574",
+      appId: "1:154794427574:web:88cba2b1ccd25504391217"
+    };
+
+    const app = initializeApp(firebaseConfig);
+  </script>
+</body>
+</html>
