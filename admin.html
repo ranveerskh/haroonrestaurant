@@ -130,6 +130,7 @@
       const list = document.getElementById("menuList");
       list.innerHTML = "<h4>Menu Items</h4>";
       const querySnapshot = await getDocs(collection(db, "menuItems"));
+      console.log("Menu Items Loaded:", querySnapshot.size);
       querySnapshot.forEach(docSnap => {
         const data = docSnap.data();
         list.innerHTML += `
