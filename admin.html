@@ -49,25 +49,27 @@
     hr {
       margin: 40px 0;
     }
-    .menu-list, .flyer-list {
+    .menu-list {
       margin-top: 20px;
     }
-    .menu-item, .flyer-item {
+    .menu-item {
       display: flex;
       justify-content: space-between;
       padding: 10px;
       border-bottom: 1px solid #ddd;
+      flex-wrap: wrap;
     }
-    .menu-item span, .flyer-item span {
+    .menu-item span {
       flex: 1;
     }
-    .menu-item button, .flyer-item button {
+    .menu-item button {
       background: #e74c3c;
       border: none;
       color: white;
       padding: 5px 10px;
       border-radius: 4px;
       cursor: pointer;
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -92,15 +94,6 @@
     <button onclick="addMenuItem()">Add Menu Item</button>
 
     <div class="menu-list" id="menuList"></div>
-
-    <hr>
-
-    <h3>Update Flyers / Landing Photos</h3>
-    <label>Flyer Image URL</label>
-    <input type="url" id="flyerUrl" placeholder="Paste flyer image URL here" />
-    <button onclick="addFlyer()">Add Flyer</button>
-
-    <div class="flyer-list" id="flyerList"></div>
   </div>
 
   <script type="module">
@@ -141,8 +134,8 @@
         const data = docSnap.data();
         list.innerHTML += `
           <div class='menu-item'>
-            <span>${data.category}</span>
-            <span>${data.name}</span>
+            <span><strong>${data.category}</strong></span>
+            <span>${data.name} - ${data.description || ''}</span>
             <span>$${data.price}</span>
             <button onclick="deleteItem('${docSnap.id}', 'menuItems')">Delete</button>
           </div>`;
@@ -165,36 +158,12 @@
       });
     }
 
-    async function addFlyer() {
-      const url = document.getElementById("flyerUrl").value;
-      if (!url) return alert("Enter a flyer image URL");
-      await addDoc(collection(db, "flyers"), { url });
-      loadFlyers();
-    }
-
-    async function loadFlyers() {
-      const list = document.getElementById("flyerList");
-      list.innerHTML = "<h4>Flyers</h4>";
-      const querySnapshot = await getDocs(collection(db, "flyers"));
-      querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        list.innerHTML += `
-          <div class='flyer-item'>
-            <span><img src="${data.url}" width="100"/></span>
-            <span>${data.url}</span>
-            <button onclick="deleteItem('${docSnap.id}', 'flyers')">Delete</button>
-          </div>`;
-      });
-    }
-
     window.deleteItem = async function(id, collectionName) {
       await deleteDoc(doc(db, collectionName, id));
       if (collectionName === 'menuItems') loadMenuItems();
-      if (collectionName === 'flyers') loadFlyers();
     }
 
     loadMenuItems();
-    loadFlyers();
     loadCategories();
   </script>
 </body>
