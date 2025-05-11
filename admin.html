@@ -2,103 +2,109 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Admin Panel - Haroon Restaurant</title>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      padding: 20px;
       margin: 0;
+      padding: 0;
+    }
+    header {
+      background: #333;
+      color: white;
+      padding: 20px;
+      text-align: center;
     }
     .container {
-      max-width: 900px;
-      margin: auto;
+      max-width: 800px;
+      margin: 30px auto;
       background: white;
       padding: 20px;
       border-radius: 8px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
     }
     h2 {
-      text-align: center;
-      color: #333;
-      margin-bottom: 20px;
+      margin-top: 0;
     }
     label {
       display: block;
-      margin-top: 15px;
-      font-weight: bold;
+      margin: 10px 0 5px;
     }
-    input, textarea, select {
+    input, select, textarea, button {
       width: 100%;
       padding: 10px;
-      margin-top: 5px;
-      border-radius: 5px;
+      margin-bottom: 15px;
+      border-radius: 4px;
       border: 1px solid #ccc;
     }
     button {
-      background: #ff8000;
+      background-color: #28a745;
       color: white;
       border: none;
-      padding: 10px 20px;
-      margin-top: 15px;
       cursor: pointer;
-      border-radius: 5px;
     }
-    hr {
-      margin: 40px 0;
+    button:hover {
+      background-color: #218838;
     }
-    .menu-list {
-      margin-top: 20px;
-    }
-    .menu-item {
-      display: flex;
-      justify-content: space-between;
+    .item {
       padding: 10px;
       border-bottom: 1px solid #ddd;
-      flex-wrap: wrap;
     }
-    .menu-item span {
-      flex: 1;
+    .item span {
+      display: inline-block;
+      min-width: 80px;
+      font-weight: bold;
     }
-    .menu-item button {
-      background: #e74c3c;
-      border: none;
-      color: white;
-      padding: 5px 10px;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-left: 10px;
+    .delete-btn {
+      background-color: #dc3545;
+      margin-top: 5px;
+    }
+    .delete-btn:hover {
+      background-color: #c82333;
     }
   </style>
 </head>
 <body>
+  <header>
+    <h1>Admin Panel</h1>
+  </header>
   <div class="container">
-    <h2>Admin Panel - Haroon Restaurant</h2>
-
-    <h3>Add Menu Item</h3>
+    <h2>Add Menu Item</h2>
     <label>Category</label>
-    <select id="category"></select>
-    <input type="text" id="newCategory" placeholder="Or enter a new category" />
+    <select id="categorySelect">
+      <option value="">-- Select Category --</option>
+      <option value="Fish Combos">Fish Combos</option>
+      <option value="Family Meals">Family Meals</option>
+      <option value="Sides">Sides</option>
+      <option value="Drinks">Drinks</option>
+    </select>
+    <label>Or Enter New Category</label>
+    <input type="text" id="newCategory" placeholder="e.g. Special Deals" />
 
     <label>Item Name</label>
-    <input type="text" id="itemName" placeholder="e.g. 2 Piece Haddock Combo" />
+    <input type="text" id="itemName" placeholder="e.g. 2 pc Haddock with Fries" />
 
     <label>Description</label>
-    <textarea id="itemDesc" placeholder="e.g. Includes fries and coleslaw"></textarea>
+    <textarea id="itemDescription" placeholder="Optional description"></textarea>
 
-    <label>Price ($)</label>
+    <label>Price</label>
     <input type="number" id="itemPrice" placeholder="e.g. 12.99" />
 
     <button onclick="addMenuItem()">Add Menu Item</button>
 
-    <div class="menu-list" id="menuList"></div>
+    <hr />
+
+    <h2>Existing Menu Items</h2>
+    <div id="menuItems"></div>
   </div>
 
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
-    import { getFirestore, collection, addDoc, getDocs, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js';
+    import {
+      getFirestore, collection, addDoc, getDocs, deleteDoc, doc
+    } from 'https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js';
 
     const firebaseConfig = {
       apiKey: "AIzaSyBdHvx7f6gO_WVH3Y0GMPSIWSO50LBTD8E",
@@ -112,60 +118,55 @@
     const app = initializeApp(firebaseConfig);
     const db = getFirestore(app);
 
-    async function addMenuItem() {
-      const newCategoryInput = document.getElementById('newCategory').value.trim();
-      const category = newCategoryInput || document.getElementById('category').value;
-      const name = document.getElementById('itemName').value;
-      const description = document.getElementById('itemDesc').value;
-      const price = document.getElementById('itemPrice').value;
+    globalThis.addMenuItem = async function () {
+      const category = document.getElementById("newCategory").value.trim() || document.getElementById("categorySelect").value;
+      const name = document.getElementById("itemName").value.trim();
+      const description = document.getElementById("itemDescription").value.trim();
+      const price = parseFloat(document.getElementById("itemPrice").value.trim());
 
-      if (!name || !price) return alert("Item name and price are required");
+      if (!category || !name || isNaN(price)) {
+        alert("Please fill out all required fields.");
+        return;
+      }
 
-      await addDoc(collection(db, "menuItems"), { category, name, description, price });
+      await addDoc(collection(db, "menuItems"), {
+        category,
+        name,
+        description,
+        price
+      });
+
+      alert("Menu item added!");
       loadMenuItems();
-      if (newCategoryInput) loadCategories();
-    }
+    };
+
+    globalThis.deleteItem = async function (id) {
+      await deleteDoc(doc(db, "menuItems", id));
+      loadMenuItems();
+    };
 
     async function loadMenuItems() {
-      const list = document.getElementById("menuList");
-      list.innerHTML = "<h4>Menu Items</h4>";
+      const menuDiv = document.getElementById("menuItems");
+      menuDiv.innerHTML = "";
       const querySnapshot = await getDocs(collection(db, "menuItems"));
       console.log("Menu Items Loaded:", querySnapshot.size);
-      querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        list.innerHTML += `
-          <div class='menu-item'>
-            <span><strong>${data.category}</strong></span>
-            <span>${data.name} - ${data.description || ''}</span>
-            <span>$${data.price}</span>
-            <button onclick="deleteItem('${docSnap.id}', 'menuItems')">Delete</button>
-          </div>`;
-      });
-    }
 
-    async function loadCategories() {
-      const catDropdown = document.getElementById('category');
-      catDropdown.innerHTML = '';
-      const catSet = new Set();
-      const querySnapshot = await getDocs(collection(db, "menuItems"));
       querySnapshot.forEach(docSnap => {
-        const data = docSnap.data();
-        if (data.category) catSet.add(data.category);
+        const item = docSnap.data();
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+          <div><span>Category:</span> ${item.category}</div>
+          <div><span>Name:</span> ${item.name}</div>
+          <div><span>Description:</span> ${item.description || ''}</div>
+          <div><span>Price:</span> $${item.price}</div>
+          <button class="delete-btn" onclick="deleteItem('${docSnap.id}')">Delete</button>
+        `;
+        menuDiv.appendChild(div);
       });
-      catSet.forEach(cat => {
-        const opt = document.createElement('option');
-        opt.value = opt.textContent = cat;
-        catDropdown.appendChild(opt);
-      });
-    }
-
-    globalThis.deleteItem = async function(id, collectionName) {
-      await deleteDoc(doc(db, collectionName, id));
-      if (collectionName === 'menuItems') loadMenuItems();
     }
 
     loadMenuItems();
-    loadCategories();
   </script>
 </body>
 </html>
